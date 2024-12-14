@@ -28,7 +28,7 @@ This is a simple Qt-based C++ application designed to edit and manage Fortnite's
 
 ## Installation
 
-- **Download the Zip File from the releasees page
-- **Unzip
-- **Start the EXE File
-- **Use the tool to optimize your Game :)
+- Download the Zip File from the releasees page
+- Unzip
+- Start the EXE File
+- Use the tool to optimize your Game :)
