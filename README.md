@@ -9,6 +9,7 @@ This is a simple Qt-based C++ application designed to edit and manage Fortnite's
 
 - **Load GameUserSettings.ini File:** Import the Fortnite settings file for editing.
 - **Save and Load Presets:** Store and retrieve customized settings presets.
+- **Generate Backup File** in the same directory as the original file, adding .bak to the file.
 - **Copy File Content:** Load the content of the `GameUserSettings.ini` file into the clipboard.
 - **Adjust Settings:** Modify various game settings including:
   - Resolution
