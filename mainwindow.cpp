@@ -19,15 +19,15 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    
+
     // Initialisiere Member-Variablen
     m_displayGamma = 2.2;
-    
+
     // Setze den Wert für das DoubleSpinBox direkt
     ui->doubleSpinBoxDisplayGamma->setValue(m_displayGamma);
 
     this->setWindowTitle("Fortnite Game User Settings Tweaker");
-    
+
     // Lade gespeicherte Einstellungen
     loadSettings();
 }
@@ -126,7 +126,7 @@ void MainWindow::on_Dateieinlesen_clicked()
     ui->doubleSpinBoxDisplayGamma->setValue(DisplayGamma);
 
     if(FortAntiAliasingMethod == "DLSS"){
-    ui->comboBoxAntiAliasingMethod->setCurrentIndex(1);
+        ui->comboBoxAntiAliasingMethod->setCurrentIndex(1);
     }
 
     if(FortAntiAliasingMethod == "Disabled"){
@@ -286,20 +286,20 @@ void MainWindow::on_pushButton_RecSettings_clicked()
 {
     // Motion Blur ausschalten
     ui->checkBox_MotionBlur->setCheckState(Qt::Unchecked);
-    
+
     // GPU Crash Debugging ausschalten
     ui->checkBoxUseGPUCrashDebugging->setCheckState(Qt::Unchecked);
-    
+
     // Latency Tweak 1 einschalten
     ui->checkBoxLatencyTweak1->setCheckState(Qt::Checked);
-    
+
     // Latency Tweak 2 auf 1 setzen
     ui->spinBoxLatencyTweak2->setValue(1);
-    
+
     // DLSS und XeSS Quality auf 0
     ui->spinBoxDLSSQuality->setValue(0);
     ui->spinBox_XeSSQuality->setValue(0);
-    
+
     // Weitere Einstellungen auf 0/aus setzen
     ui->spinBoxDesiredGlobalIlluminationQuality->setValue(0);
     ui->spinBoxDesiredReflectionQuality->setValue(0);
@@ -315,19 +315,21 @@ Qt::CheckState MainWindow::StringToBool(const std::string &tmp) {
         return Qt::Unchecked;
     }
     else{
-    return Qt::Checked;
+        return Qt::Checked;
     }
 }
 
 
 
 //Save Changes Button
-void MainWindow::on_pushButton_SaveChanges_clicked()
+void MainWindow::on_pushButton_SaveChanges_clicked(QString filepath)
 {
-    // Öffne die Datei im Schreibmodus
-    QFile file("path/to/your/file.txt");
+    // Ersetze den Platzhalterpfad durch den tatsächlichen Pfad
+    //QString filePath = "C:/path/to/your/file.txt";  // Beispielpfad
+
+    QFile file(filepath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Error", "Could not open file. Make sure it is writable.");
+        QMessageBox::warning(this, "Error", "Could not open file: " + filepath + "\nError: " + file.errorString());
         return;
     }
 
@@ -372,6 +374,16 @@ void MainWindow::on_pushButton_SaveChanges_clicked()
     file.close();
 
     QMessageBox::information(this, "Success", "All Changes have been saved.");
+
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, "Error",
+                              "Could not open file: " + filepath +
+                                  "\nError code: " + QString::number(file.error()) +
+                                  "\nError message: " + file.errorString());
+        return;
+    }
+
 }
 
 
@@ -381,38 +393,38 @@ void MainWindow::on_pushButtonNewPreset_clicked()
     // Dialog für den Preset-Namen öffnen
     bool ok;
     QString presetName = QInputDialog::getText(this, "New Preset",
-                                             "Name this preset:",
-                                             QLineEdit::Normal,
-                                             "", &ok);
+                                               "Name this preset:",
+                                               QLineEdit::Normal,
+                                               "", &ok);
 
     if (ok && !presetName.isEmpty()) {
         // Prüfe ob der Name bereits existiert
         for(int i = 0; i < ui->listWidgetSavedPresets->count(); i++) {
             if(ui->listWidgetSavedPresets->item(i)->text() == presetName) {
-                QMessageBox::warning(this, "Error", 
-                    "A preset with this name already exists!\nPlease choose a different name.");
+                QMessageBox::warning(this, "Error",
+                                     "A preset with this name already exists!\nPlease choose a different name.");
                 return;
             }
         }
 
         // Aktuelle GUI-Werte auslesen
         QString preset = presetName + "|" +
-                        ui->textEdit_ResX->toPlainText() + "|" +
-                        ui->textEdit_ResY->toPlainText() + "|" +
-                        (ui->checkBox_MotionBlur->isChecked() ? "True" : "False") + "|" +
-                        (ui->checkBoxUseGPUCrashDebugging->isChecked() ? "True" : "False") + "|" +
-                        (ui->checkBoxLatencyTweak1->isChecked() ? "True" : "False") + "|" +
-                        QString::number(ui->spinBoxLatencyTweak2->value()) + "|" +
-                        QString::number(ui->spinBoxDLSSQuality->value()) + "|" +
-                        QString::number(ui->spinBox_XeSSQuality->value()) + "|" +
-                        QString::number(ui->doubleSpinBoxDisplayGamma->value()) + "|" +
-                        ui->comboBoxAntiAliasingMethod->currentText() + "|" +
-                        (ui->checkBoxRayTracing->isChecked() ? "True" : "False") + "|" +
-                        QString::number(ui->spinBoxDesiredGlobalIlluminationQuality->value()) + "|" +
-                        QString::number(ui->spinBoxDesiredReflectionQuality->value()) + "|" +
-                        QString::number(ui->spinBox_PreNaniteGlobalIlluminationQuality->value()) + "|" +
-                        QString::number(ui->spinBox_PreNaniteReflectionQuality->value());
-                        QString::number(ui->spinBoxFrontEndFrameLimit->value());
+                         ui->textEdit_ResX->toPlainText() + "|" +
+                         ui->textEdit_ResY->toPlainText() + "|" +
+                         (ui->checkBox_MotionBlur->isChecked() ? "True" : "False") + "|" +
+                         (ui->checkBoxUseGPUCrashDebugging->isChecked() ? "True" : "False") + "|" +
+                         (ui->checkBoxLatencyTweak1->isChecked() ? "True" : "False") + "|" +
+                         QString::number(ui->spinBoxLatencyTweak2->value()) + "|" +
+                         QString::number(ui->spinBoxDLSSQuality->value()) + "|" +
+                         QString::number(ui->spinBox_XeSSQuality->value()) + "|" +
+                         QString::number(ui->doubleSpinBoxDisplayGamma->value()) + "|" +
+                         ui->comboBoxAntiAliasingMethod->currentText() + "|" +
+                         (ui->checkBoxRayTracing->isChecked() ? "True" : "False") + "|" +
+                         QString::number(ui->spinBoxDesiredGlobalIlluminationQuality->value()) + "|" +
+                         QString::number(ui->spinBoxDesiredReflectionQuality->value()) + "|" +
+                         QString::number(ui->spinBox_PreNaniteGlobalIlluminationQuality->value()) + "|" +
+                         QString::number(ui->spinBox_PreNaniteReflectionQuality->value());
+        QString::number(ui->spinBoxFrontEndFrameLimit->value());
 
         // Neues Item zur Liste hinzufügen
         QListWidgetItem* item = new QListWidgetItem(presetName);
@@ -472,13 +484,13 @@ void MainWindow::on_pushButtonDeletePreset_clicked()
         "delete preset",
         "Do you really want to delete preset  '" + currentItem->text() + "' ?",
         QMessageBox::Yes | QMessageBox::No
-    );
+        );
 
     if (reply == QMessageBox::Yes) {
         // Item aus der Liste entfernen
         delete ui->listWidgetSavedPresets->takeItem(
             ui->listWidgetSavedPresets->row(currentItem)
-        );
+            );
         QMessageBox::information(this, "Success", "Preset was deleted successfully.");
     }
 }
@@ -493,7 +505,7 @@ void MainWindow::on_listWidgetSavedPresets_itemDoubleClicked(QListWidgetItem *it
 void MainWindow::saveSettings()
 {
     QSettings settings("Duesentrieb54", "FortniteEditor");
-    
+
     // Speichere die aktuellen Werte
     settings.setValue("ResolutionX", ui->textEdit_ResX->toPlainText());
     settings.setValue("ResolutionY", ui->textEdit_ResY->toPlainText());
@@ -504,10 +516,10 @@ void MainWindow::saveSettings()
     settings.setValue("DLSSQuality", ui->spinBoxDLSSQuality->value());
     settings.setValue("XeSSQuality", ui->spinBox_XeSSQuality->value());
     settings.setValue("DisplayGamma", m_displayGamma);
-    
+
     QString antiAliasingMethod = ui->comboBoxAntiAliasingMethod->currentText();
     settings.setValue("AntiAliasingMethod", antiAliasingMethod);
-    
+
     ui->checkBoxRayTracing->isChecked();
     settings.setValue("RayTracing", ui->checkBoxRayTracing->isChecked());
     settings.setValue("DesiredGlobalIlluminationQuality", ui->spinBoxDesiredGlobalIlluminationQuality->value());
@@ -529,7 +541,7 @@ void MainWindow::saveSettings()
 void MainWindow::loadSettings()
 {
     QSettings settings("Duesentrieb54", "FortniteEditor");
-    
+
     // Lade die gespeicherten Werte und setze Standardwerte falls keine vorhanden sind
     ui->textEdit_ResX->setPlainText(settings.value("ResolutionX", "1920").toString());
     ui->textEdit_ResY->setPlainText(settings.value("ResolutionY", "1080").toString());
@@ -539,16 +551,16 @@ void MainWindow::loadSettings()
     ui->spinBoxLatencyTweak2->setValue(settings.value("LatencyTweak2", 0).toInt());
     ui->spinBoxDLSSQuality->setValue(settings.value("DLSSQuality", 0).toInt());
     ui->spinBox_XeSSQuality->setValue(settings.value("XeSSQuality", 0).toInt());
-    
+
     m_displayGamma = settings.value("DisplayGamma", 2.2).toDouble();
     ui->doubleSpinBoxDisplayGamma->setValue(static_cast<int>(m_displayGamma * 100));
-    
+
     QString antiAliasingMethod = settings.value("AntiAliasingMethod", "DLSS").toString();
     int index = ui->comboBoxAntiAliasingMethod->findText(antiAliasingMethod);
     if (index != -1) {
         ui->comboBoxAntiAliasingMethod->setCurrentIndex(index);
     }
-    
+
     ui->checkBoxRayTracing->setChecked(settings.value("RayTracing", false).toBool());
     ui->spinBoxDesiredGlobalIlluminationQuality->setValue(settings.value("DesiredGlobalIlluminationQuality", 0).toInt());
     ui->spinBoxDesiredReflectionQuality->setValue(settings.value("DesiredReflectionQuality", 0).toInt());
@@ -579,13 +591,13 @@ void MainWindow::on_pushButtonCopyFileContent_clicked()
 {
     // Hole den Text aus dem TextBrowser
     QString content = ui->textBrowser->toPlainText();
-    
+
     // Prüfe ob Inhalt vorhanden ist
     if(content.isEmpty()) {
         QMessageBox::warning(this, "Fehler", "Kein Inhalt zum Kopieren vorhanden!");
         return;
     }
-    
+
     // Entferne den Dateipfad und die Leerzeilen am Anfang
     QStringList lines = content.split("\n");
     // Überspringe die ersten 4 Zeilen (Filepath + 3 Leerzeilen)
@@ -593,15 +605,14 @@ void MainWindow::on_pushButtonCopyFileContent_clicked()
     lines.removeFirst(); // Entfernt den Pfad
     lines.removeFirst(); // Entfernt erste Leerzeile
     lines.removeFirst(); // Entfernt zweite Leerzeile
-    
+
     // Füge die restlichen Zeilen wieder zusammen
     QString cleanContent = lines.join("\n");
-    
+
     // Kopiere den bereinigten Inhalt in die Zwischenablage
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(cleanContent);
-    
+
     // Zeige Bestätigungsmeldung
     QMessageBox::information(this, "Erfolg", "Inhalt wurde in die Zwischenablage kopiert!");
 }
-
