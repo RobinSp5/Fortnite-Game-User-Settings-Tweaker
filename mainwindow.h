@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QString filepath;
 
 private slots:
     void on_horizontalSlider_DisplayGamma_valueChanged(int value);
