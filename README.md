@@ -36,4 +36,5 @@ Optimize your game with just a few clicks!
 4. Start tweaking your settings!
    
 💡 Tip: For quicker access, you can create a desktop shortcut to the .exe file.
+
 ⚠️ Important: Do not delete or move the folder containing the executable and other required files, as the application depends on them to function properly.
