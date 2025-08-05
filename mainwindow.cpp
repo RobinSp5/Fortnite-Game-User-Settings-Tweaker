@@ -218,7 +218,8 @@ void MainWindow::on_pushButton_GenBackupFile_clicked()
     // Wenn eine Datei vom Benutzer ausgewählt wird
     QString filepath;
     if (ui->checkBoxUseDefaultPath->isChecked()) {
-        filepath = "C:\\work\\Downloads\\GameUserSettings.ini";  // Standardpfad
+        QString userProfile = qgetenv("USERPROFILE");
+        filepath = userProfile + "\\AppData\\Local\\FortniteGame\\Saved\\Config\\WindowsClient\\GameUserSettings.ini";
     } else {
         filepath = QFileDialog::getOpenFileName(this,
                                                 "Datei auswählen",
@@ -276,9 +277,9 @@ void MainWindow::on_pushButton_GenBackupFile_clicked()
 
 
 
-void MainWindow::on_checkBoxUseDefaultPath_checkStateChanged(const Qt::CheckState &arg1)
+void MainWindow::on_checkBoxUseDefaultPath_checkStateChanged(const Qt::CheckState &)
 {
-
+    // Empty implementation - parameter name removed to avoid warning
 }
 
 //Pushbutton um die recommended Settings anzupassen
@@ -321,11 +322,23 @@ Qt::CheckState MainWindow::StringToBool(const std::string &tmp) {
 
 
 
-//Save Changes Button
-void MainWindow::on_pushButton_SaveChanges_clicked(QString filepath)
+//Save Changes Button - Fixed: Remove QString parameter
+void MainWindow::on_pushButton_SaveChanges_clicked()
 {
-    // Ersetze den Platzhalterpfad durch den tatsächlichen Pfad
-    //QString filePath = "C:/path/to/your/file.txt";  // Beispielpfad
+    // Get filepath based on checkbox setting
+    QString filepath;
+    if (ui->checkBoxUseDefaultPath->isChecked()) {
+        QString userProfile = qgetenv("USERPROFILE");
+        filepath = userProfile + "\\AppData\\Local\\FortniteGame\\Saved\\Config\\WindowsClient\\GameUserSettings.ini";
+    } else {
+        filepath = QFileDialog::getSaveFileName(this,
+                                                "Speichere Änderungen",
+                                                QDir::homePath(),
+                                                "INI-Dateien (*.ini);;Alle Dateien (*.*)");
+        if (filepath.isEmpty()) {
+            return; // User cancelled
+        }
+    }
 
     QFile file(filepath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -374,16 +387,6 @@ void MainWindow::on_pushButton_SaveChanges_clicked(QString filepath)
     file.close();
 
     QMessageBox::information(this, "Success", "All Changes have been saved.");
-
-
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox::critical(this, "Error",
-                              "Could not open file: " + filepath +
-                                  "\nError code: " + QString::number(file.error()) +
-                                  "\nError message: " + file.errorString());
-        return;
-    }
-
 }
 
 
@@ -407,7 +410,7 @@ void MainWindow::on_pushButtonNewPreset_clicked()
             }
         }
 
-        // Aktuelle GUI-Werte auslesen
+        // Aktuelle GUI-Werte auslesen - Fixed: Missing separator
         QString preset = presetName + "|" +
                          ui->textEdit_ResX->toPlainText() + "|" +
                          ui->textEdit_ResY->toPlainText() + "|" +
@@ -423,8 +426,8 @@ void MainWindow::on_pushButtonNewPreset_clicked()
                          QString::number(ui->spinBoxDesiredGlobalIlluminationQuality->value()) + "|" +
                          QString::number(ui->spinBoxDesiredReflectionQuality->value()) + "|" +
                          QString::number(ui->spinBox_PreNaniteGlobalIlluminationQuality->value()) + "|" +
-                         QString::number(ui->spinBox_PreNaniteReflectionQuality->value());
-        QString::number(ui->spinBoxFrontEndFrameLimit->value());
+                         QString::number(ui->spinBox_PreNaniteReflectionQuality->value()) + "|" +
+                         QString::number(ui->spinBoxFrontEndFrameLimit->value());
 
         // Neues Item zur Liste hinzufügen
         QListWidgetItem* item = new QListWidgetItem(presetName);
@@ -495,7 +498,7 @@ void MainWindow::on_pushButtonDeletePreset_clicked()
     }
 }
 
-void MainWindow::on_listWidgetSavedPresets_itemDoubleClicked(QListWidgetItem *item)
+void MainWindow::on_listWidgetSavedPresets_itemDoubleClicked(QListWidgetItem *)
 {
     // Einfach die Load Preset Funktion aufrufen
     on_pushButtonLoadPreset_clicked();
