@@ -1,11 +1,12 @@
 # Fortnite-Game-User-Settings-Tweaker
 
-This is a simple Qt-based C++ application designed to edit and manage Fortnite's `GameUserSettings.ini` file. The program allows users to load the configuration file, modify various settings, and save presets for future use.
+A lightweight **Qt-based C++ application** to tweak Fortnite's `GameUserSettings.ini` file.  The program allows users to load the configuration file, modify various settings, and save presets for future use.
+Optimize your game with just a few clicks!
 
 ![PreviewImage](https://github.com/user-attachments/assets/9d97cba8-b320-49eb-bd24-9bf629827eb5)
 
 
-## Features
+## 🎮 Features
 
 - **Load GameUserSettings.ini File:** Import the Fortnite settings file for editing.
 - **Save and Load Presets:** Store and retrieve customized settings presets.
@@ -27,9 +28,9 @@ This is a simple Qt-based C++ application designed to edit and manage Fortnite's
   - Pre-Nanite Global Illumination Quality
   - Pre-Nanite Reflection Quality
 
-## Installation
+## 🛠️ Installation
 
-- Download the Zip File from the releasees page
-- Unzip
-- Start the EXE File
-- Use the tool to optimize your Game :)
+1. [Download latest release](https://github.com/RobinSp5/Fortnite-Game-User-Settings-Tweaker/releases)
+2. Unzip the folder
+3. Run the `.exe` file
+4. Start tweaking your settings!
