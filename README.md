@@ -32,5 +32,8 @@ Optimize your game with just a few clicks!
 
 1. [Download latest release](https://github.com/RobinSp5/Fortnite-Game-User-Settings-Tweaker/releases)
 2. Unzip the folder
-3. Run the `.exe` file
+3. Run the `FortniteEditor.exe` file
 4. Start tweaking your settings!
+   
+💡 Tip: For quicker access, you can create a desktop shortcut to the .exe file.
+⚠️ Important: Do not delete or move the folder containing the executable and other required files, as the application depends on them to function properly.
